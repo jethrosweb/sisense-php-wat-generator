@@ -2,7 +2,7 @@
     require("./vendor/autoload.php");
 
     use Jose\Component\Core\AlgorithmManager;
-    use Jose\Component\Encryption\Algorithm\KeyEncryption\RSA0AEP256;
+    use Jose\Component\Encryption\Algorithm\KeyEncryption\RSAOAEP256;
     use Jose\Component\Encryption\Algorithm\ContentEncryption\A128GCM;
     use Jose\Component\Encryption\Compression\CompressionMethodManager;
     use Jose\Component\Encryption\Compression\Deflate;
@@ -12,7 +12,7 @@
     
     // Key encryption algorithm manager - RSA0AEP256 algorithm.
     $keyEncryptionAlgorithmManager = new AlgorithmManager([
-        new RSA0AEP256(),
+        new RSAOAEP256(),
     ]);
     
     // COntent encryption algorithm manager - A128GCM algorithm.
@@ -33,12 +33,12 @@
     );
     
     // Configure key - ensure publick key formatting is correct
-    $publicKey = '';
+    $publicKey = 'enter here';
 
     $key = JWKFactory::createFromKey($publicKey,
         'Secret',
         [
-            'kid' => ''
+            'kid' => 'enter here'
         ]
     );
     
@@ -47,4 +47,24 @@
         'sub' => ''
     ], JSON_UNESCAPED_SLASHES);
 
+    // Combine token content
+    $jwe = $jweBuilder
+        ->create()
+        ->withPayload($payload)
+        ->withSharedProtectedHeader([
+            'alg' => 'RSA-OAEP-256',
+            'typ' => 'JWT',
+            'zip' => 'DEF',
+            'enc' => 'A128GCM',
+            'kid' => 'enter here'
+        ])
+        ->addRecipient($key)
+        ->build();
+
+    // Serialize into token format
+    $serializer = new CompactSerializer();
+
+    $wat = $serializer->serialize($jwe, 0);
+
+    print_r($wat);
 ?>
