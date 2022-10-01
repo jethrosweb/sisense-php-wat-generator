@@ -32,4 +32,19 @@
         $compressionMethodManager
     );
     
+    // Configure key - ensure publick key formatting is correct
+    $publicKey = '';
+
+    $key = JWKFactory::createFromKey($publicKey,
+        'Secret',
+        [
+            'kid' => ''
+        ]
+    );
+    
+    // Construct payload (add additional paramaters as required)
+    $payload = json_encode([
+        'sub' => ''
+    ], JSON_UNESCAPED_SLASHES);
+
 ?>
